@@ -11,7 +11,9 @@ pc_selection(
   top.sdev = 20,
   top.multimodal = 3,
   th.sdev = 1,
-  th.multimodal = 0.0125
+  th.multimodal = 0.0125,
+  if.plot = FALSE,
+  pc.th = 20
 )
 }
 \arguments{
@@ -28,6 +30,10 @@ pc_selection(
 \item{th.sdev}{Numeric. When using_rank is FALSE, it sets the threshold of standard deviations of PCs. Default is 1.}
 
 \item{th.multimodal}{Numeric. When using_rank is FALSE, it sets the threshold of dip statistics. Default is 0.0125.}
+
+\item{if.plot}{Logical, indicating whether to plot PC selection line plot or not. Default is FALSE.}
+
+\item{pc.th}{Numberic, it sets the threshold of x-axis of PC selection line plot. Default is 20.}
 }
 \value{
 A character vector containing the names of selected PCs.

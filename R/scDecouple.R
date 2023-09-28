@@ -7,6 +7,7 @@
 #' @param Y.norm.log.sub The PC matrix of the perturbation group, cell-by-PC.
 #' @param select.pcs A character vector containing the names of selected PCs.
 #' @param seed_ Optional. The random seed for the EM algorithm. Default is 0.
+#' @param if.plot Logical, indicating whether to plot scatter plot or not. Default is FALSE.
 #'
 #' @return A list containing the following results:
 #'   \itemize{
@@ -22,7 +23,7 @@
 #' result <- scDecouple(Z.pca.mat, Z.pca.rotation, Y.norm.log.sub, select.pcs, seed_)
 #'
 #' @export
-scDecouple <- function(Z.pca.mat, Z.pca.rotation, Y.norm.log.sub, select.pcs, seed_ = 0) {
+scDecouple <- function(Z.pca.mat, Z.pca.rotation, Y.norm.log.sub, select.pcs, seed_ = 0, if.plot=FALSE) {
   
   library(tidyverse)
   
@@ -56,6 +57,24 @@ scDecouple <- function(Z.pca.mat, Z.pca.rotation, Y.norm.log.sub, select.pcs, se
   beta.PC.scDecouple <- beta.PC
   beta.PC.scDecouple[select.pcs] <- beta.scDecouple
   
+  # plots of control cells
+  if(if.plot){
+        
+        mat.df.2d <- cbind(Z.PCA[,select.pcs[c(1,2)]],(z.labels))%>%
+                as.data.frame%>%rename_with(~c('PC_selected_1','PC_selected_2','label'))
+        p.pcs <- ggplot(mat.df.2d,aes(x=PC_selected_1,y=PC_selected_2,color=as.character(z.labels)))+
+                geom_point(cex=0.1)+   
+                scale_color_manual(values=colors_[c(4,8)])+
+                scale_fill_manual(values=colors_[c(4,8)])+
+                theme_classic()+
+                #xlab('PC1 value')+ylab('Frequency')+
+                theme(aspect.ratio = 1,legend.position = 'none',
+                     axis.text=element_text(size=8,color = 'black'),
+                     axis.title=element_text(size=8,face='bold',color = 'black'))
+        p.pcs%>%print
+        
+    }
+    
   return(list(ratio.changes = ratio.changes,
               beta.PC.scDecouple = beta.PC.scDecouple))
 }

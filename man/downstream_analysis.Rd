@@ -10,7 +10,8 @@ downstream_analysis(
   Z.norm.log.sub,
   Y.norm.log.sub,
   genes.variable,
-  degenes.num = 1500
+  degenes.num = 1500,
+  if.plot = FALSE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ downstream_analysis(
 \item{genes.variable}{A list of variable genes selected for analysis.}
 
 \item{degenes.num}{Optional. The number of genes to be included in GO enrichment analysis. Default is 1500.}
+
+\item{if.plot}{Logical, indicating whether to plot enrichment plot or not. Default is FALSE.}
 }
 \value{
 A list containing the following results:

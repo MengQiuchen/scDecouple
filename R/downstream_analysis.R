@@ -8,6 +8,7 @@
 #' @param Y.norm.log.sub The log-normalized perturbation group gene expression matrix, cell-by-gene, e.g., "Y.norm.log.sub" from "data_preprocessing" function.
 #' @param genes.variable A list of variable genes selected for analysis.
 #' @param degenes.num Optional. The number of genes to be included in GO enrichment analysis. Default is 1500.
+#' @param if.plot Logical, indicating whether to plot enrichment plot or not. Default is FALSE.
 #'
 #' @return A list containing the following results:
 #'   \itemize{
@@ -24,7 +25,7 @@
 #'
 #' @export
 downstream_analysis <- function(Z.pca.rotation, beta.PC.scDecouple, Z.norm.log.sub, Y.norm.log.sub, genes.variable,
-                                degenes.num = 1500) {
+                                degenes.num = 1500, if.plot=FALSE) {
   
   library(tidyverse)
   
@@ -44,6 +45,17 @@ downstream_analysis <- function(Z.pca.rotation, beta.PC.scDecouple, Z.norm.log.s
   suppressMessages({
     GO.enrich <- results.genesort[1:degenes.num] %>% names %>% enrichr('GO_Biological_Process_2018') %>% .$GO_Biological_Process_2018
   })
+    
+  if(if.plot){
+        p.go <- ggplot(GO.enrich[1:th.go,], aes(x = Term, y = Combined.Score)) +
+                  geom_bar(stat = "identity", fill = "red") +
+                  labs(title = "GO enrichment", x = "Pathway", y = "Combined Score") +
+                  theme_minimal() +
+                  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+        p.go%>%print   
+        
+    }
   
   return(list(gene.rank = results.genesort.fc,
               GO.enrich = GO.enrich))
